@@ -1,6 +1,6 @@
 ---
 pagetitle: "John Baker – Learning Analytics"
-title: "Assignments"
+title: "Project"
 listing: 
   contents:
     - "*/index.qmd"
