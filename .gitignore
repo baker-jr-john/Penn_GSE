@@ -9,3 +9,4 @@
 *.py
 *.docx
 *.env
+**/*.quarto_ipynb
