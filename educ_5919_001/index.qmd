@@ -1,0 +1,15 @@
+---
+pagetitle: "John Baker – Learning Analytics & AI"
+title: "Deep Learning & Transformer Models"
+listing: 
+  contents:
+    - "*/index.qmd"
+  sort: "date desc"
+  type: default
+  categories: false
+  sort-ui: false
+  filter-ui: false
+title-block-banner: true
+page-navigation: true
+back-to-top-navigation: false
+---
