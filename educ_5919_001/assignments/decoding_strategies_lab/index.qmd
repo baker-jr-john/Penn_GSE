@@ -1,7 +1,7 @@
 ---
 pagetitle: "John Baker – Learning Analytics & AI"
 title: "Decoding Strategies Lab: Teacher Feedback Generation"
-description: "Exploring how greedy search, beam search, top-k sampling, and nucleus sampling shape GPT-2 generated teacher feedback—with token-level probability analysis and a classroom recommendation."
+description: "Exploring how greedy search, beam search, top-k sampling, and nucleus sampling shape GPT-2 generated teacher feedback"
 date: 2026-03-16
 author: 
   - name: John Baker
@@ -58,7 +58,7 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 # Load model and tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 model = GPT2LMHeadModel.from_pretrained('gpt2')
-model.eval()
+_ = model.eval()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = model.to(device)
@@ -68,7 +68,7 @@ tokenizer.pad_token = tokenizer.eos_token
 model.config.pad_token_id = tokenizer.eos_token_id
 
 # Reproducibility
-torch.manual_seed(42)
+_ = torch.manual_seed(42)
 np.random.seed(42)
 
 print(f"Model loaded on: {device}")
