@@ -36,7 +36,43 @@ This assignment explores how different decoding strategies affect text generated
 **Why decoding matters:** The same model with the same prompt can produce very different text depending on *how* we select the next token from the probability distribution. A deterministic strategy (greedy) always picks the top token, while sampling strategies introduce randomness. This choice directly affects whether the output is repetitive, creative, coherent, or surprising — all of which matter when generating text for educational settings like teacher feedback.
 
 ```{python}
+# Install compatible dependencies (only runs if transformers is not yet installed)
+import importlib.util
+if importlib.util.find_spec("transformers") is None:
+    import subprocess
+    subprocess.check_call([
+        "pip", "install",
+        "transformers>=4.30,<5", "torch", "matplotlib", "numpy", "pandas",
+        "-q"
+    ])
 
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # Suppress TensorFlow info messages
+
+import torch
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
+
+# Load model and tokenizer
+tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+model = GPT2LMHeadModel.from_pretrained('gpt2')
+_ = model.eval()
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+model = model.to(device)
+
+# Set pad token to eos token (GPT-2 has no pad token by default)
+tokenizer.pad_token = tokenizer.eos_token
+model.config.pad_token_id = tokenizer.eos_token_id
+
+# Reproducibility
+_ = torch.manual_seed(42)
+np.random.seed(42)
+
+print(f"Model loaded on: {device}")
+print(f"Vocabulary size: {tokenizer.vocab_size:,}")
 ```
 
 ## Prompt Family: Teacher Feedback
