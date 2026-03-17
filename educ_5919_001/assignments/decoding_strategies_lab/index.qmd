@@ -2,7 +2,7 @@
 pagetitle: "John Baker – Learning Analytics & AI"
 title: "Decoding Strategies Lab: Teacher Feedback Generation"
 description: "Exploring how greedy search, beam search, top-k sampling, and nucleus sampling shape GPT-2 generated teacher feedback"
-date: 2026-03-16
+date: 2026-03-17
 author: 
   - name: John Baker
     email: jbaker1@upenn.edu
@@ -20,7 +20,7 @@ draft: false
 jupyter: python3
 ipynb-shell-interactivity: all
 execute: 
-  freeze: true
+  freeze: false
 ---
 
 ## Introduction
