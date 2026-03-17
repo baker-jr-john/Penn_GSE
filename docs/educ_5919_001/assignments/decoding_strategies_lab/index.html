@@ -205,7 +205,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>What GPT-2 does during generation:</strong> GPT-2 is an autoregressive language model. Given a sequence of tokens, it predicts a probability distribution over the entire vocabulary for the <em>next</em> token. It then selects a token from that distribution, appends it to the sequence, and repeats. Text is generated one token at a time.</p>
 <p><strong>Logits and probabilities:</strong> At each generation step, the model outputs a vector of raw scores called <strong>logits</strong> — one per vocabulary token. These are not probabilities yet. Applying the <strong>softmax</strong> function converts logits into a valid probability distribution (values between 0 and 1 that sum to 1). A token with a high probability is one the model considers likely given the preceding context.</p>
 <p><strong>Why decoding matters:</strong> The same model with the same prompt can produce very different text depending on <em>how</em> we select the next token from the probability distribution. A deterministic strategy (greedy) always picks the top token, while sampling strategies introduce randomness. This choice directly affects whether the output is repetitive, creative, coherent, or surprising — all of which matter when generating text for educational settings like teacher feedback.</p>
-<div id="2bc29f9d" class="cell" data-execution_count="1">
+<div id="e9a5720e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install compatible dependencies (only runs if transformers is not yet installed)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> importlib.util</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> importlib.util.find_spec(<span class="st">"transformers"</span>) <span class="kw">is</span> <span class="va">None</span>:</span>
@@ -252,7 +252,7 @@ Vocabulary size: 50,257</code></pre>
 <section id="prompt-family-teacher-feedback" class="level2">
 <h2 class="anchored" data-anchor-id="prompt-family-teacher-feedback">Prompt Family: Teacher Feedback</h2>
 <p>We use a family of three prompts that simulate <strong>teacher feedback on student essays</strong>. These prompts are educationally relevant because feedback is one of the most common and impactful uses of language in classrooms. Each prompt begins a feedback sentence that the model must complete, letting us observe how different decoding strategies shape the tone, specificity, and coherence of the generated feedback.</p>
-<div id="8ddb12ff" class="cell" data-execution_count="2">
+<div id="9f96f8bf" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>prompts <span class="op">=</span> [</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Teacher feedback on a student essay: Your claim is interesting, but"</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Teacher feedback on a student essay: You are close, but your reasoning needs"</span>,</span>
@@ -267,7 +267,7 @@ Prompt 2: "Teacher feedback on a student essay: You are close, but your reasonin
 Prompt 3: "Teacher feedback on a student essay: One thing to revise in this paragraph is"</code></pre>
 </div>
 </div>
-<div id="3bbca319" class="cell" data-execution_count="3">
+<div id="c28d6d6f" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_and_analyze(prompt, <span class="op">**</span>generate_kwargs):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Generate text from a prompt using model.generate() with output_scores=True.</span></span>
@@ -366,7 +366,7 @@ Prompt 3: "Teacher feedback on a student essay: One thing to revise in this para
 <section id="greedy-search" class="level2">
 <h2 class="anchored" data-anchor-id="greedy-search">Greedy Search</h2>
 <p><strong>How it works:</strong> At each step, greedy search selects the single token with the highest probability. It is deterministic — the same prompt always produces the same output. This makes it predictable and consistent, but it can lead to repetitive or generic text because it never explores lower-probability alternatives that might produce more natural language.</p>
-<div id="c4412870" class="cell" data-execution_count="4">
+<div id="2388a353" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"GREEDY SEARCH"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
@@ -445,7 +445,7 @@ Min token probability: 0.020
 <section id="beam-search" class="level2">
 <h2 class="anchored" data-anchor-id="beam-search">Beam Search</h2>
 <p><strong>How it works:</strong> Beam search maintains multiple candidate sequences (“beams”) in parallel. At each step, it expands each beam with the top candidates and keeps only the highest-scoring sequences overall. The final output is the sequence with the best cumulative score. This often produces more globally coherent text than greedy search. We also use <code>no_repeat_ngram_size=2</code> to prevent the model from repeating the same bigram, which helps reduce the repetitive loops that GPT-2 is prone to.</p>
-<div id="e4270db1" class="cell" data-execution_count="5">
+<div id="cff8f418" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"BEAM SEARCH (num_beams=5, no_repeat_ngram_size=2)"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
@@ -528,7 +528,7 @@ Min token probability: 0.053
 <section id="top-k-sampling" class="level2">
 <h2 class="anchored" data-anchor-id="top-k-sampling">Top-k Sampling</h2>
 <p><strong>How it works:</strong> At each step, top-k sampling restricts the candidate pool to the <strong>k most probable tokens</strong>, then samples randomly from that reduced distribution. This introduces variety while preventing the model from selecting extremely unlikely tokens. A lower temperature (0.8) sharpens the distribution, making higher-probability tokens more likely to be chosen while still allowing some diversity.</p>
-<div id="e9ed809e" class="cell" data-execution_count="6">
+<div id="e9ef0c18" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"TOP-K SAMPLING (k=50, temperature=0.8)"</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
@@ -610,7 +610,7 @@ Min token probability: 0.002
 <section id="nucleus-top-p-sampling" class="level2">
 <h2 class="anchored" data-anchor-id="nucleus-top-p-sampling">Nucleus (Top-p) Sampling</h2>
 <p><strong>How it works:</strong> Nucleus sampling dynamically adjusts the candidate pool at each step. Instead of a fixed number of tokens (top-k), it includes the smallest set of tokens whose cumulative probability exceeds a threshold <strong>p</strong>. When the model is confident (one token dominates), the pool is small; when the model is uncertain (many tokens share probability), the pool is larger. This adapts to the model’s confidence at each position, making it particularly effective at producing natural-sounding text.</p>
-<div id="bb998dec" class="cell" data-execution_count="7">
+<div id="de97c416" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NUCLEUS (TOP-P) SAMPLING (p=0.9, temperature=0.8)"</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
@@ -707,7 +707,7 @@ Min token probability: 0.002
 <li><p><strong>Token probability stability:</strong> Greedy search shows consistently high probabilities (always picking the top token). Beam search shows occasional dips where the no-repeat constraint forces less likely tokens. Sampling strategies show more variable probabilities throughout, reflecting their random exploration of the distribution.</p></li>
 <li><p><strong>Classroom implications:</strong> For teacher feedback tools, we need a balance between consistency (so feedback is always appropriate) and naturalness (so feedback does not sound robotic). Very low-probability tokens may signal incoherent or off-topic text, which would be inappropriate in a classroom.</p></li>
 </ul>
-<div id="8b52884b" class="cell" data-execution_count="8">
+<div id="7685bd56" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Comparison Table ---</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>strategy_names <span class="op">=</span> [<span class="st">'Greedy'</span>, <span class="st">'Beam Search'</span>, <span class="st">'Top-k (k=50)'</span>, <span class="st">'Nucleus (p=0.9)'</span>]</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>all_results <span class="op">=</span> [greedy_results, beam_results, topk_results, nucleus_results]</span>

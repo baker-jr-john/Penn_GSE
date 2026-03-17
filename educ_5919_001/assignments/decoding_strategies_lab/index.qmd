@@ -20,7 +20,7 @@ draft: false
 jupyter: python3
 ipynb-shell-interactivity: all
 execute: 
-  freeze: false
+  freeze: true
 ---
 
 ## Introduction
