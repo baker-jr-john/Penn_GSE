@@ -20,7 +20,7 @@ draft: false
 jupyter: python3
 ipynb-shell-interactivity: all
 execute: 
-  freeze: false
+  freeze: true
 ---
 
 ## Introduction
@@ -421,3 +421,7 @@ Here is the reasoning:
 For a production classroom tool, nucleus sampling with a moderate temperature and post-generation filtering (to catch any inappropriate outputs) offers the best balance of natural-sounding, varied, and coherent teacher feedback. If consistency is paramount (e.g., high-stakes assessments), beam search would be the safer choice.
 
 The token-level probability evidence supports this: nucleus sampling maintains reasonably stable probabilities (indicating coherent text) while showing enough variation to avoid the monotonous repetition visible in greedy search outputs.
+
+## Declaration of Generative AI Utilization
+
+During the preparation of this work, the author utilized Anthropic's Claude Opus 4.6. They reviewed and edited the content of this assignment as needed and takes full responsibility for it.
