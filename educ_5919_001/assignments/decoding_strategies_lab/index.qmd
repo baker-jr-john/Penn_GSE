@@ -14,7 +14,7 @@ keywords:
   - text generation                                                             
   - GPT-2                                                                       
   - token probabilities
-# image: 
+image: images/Gemini_Generated_Image_1vc6am1vc6am1vc6.png
 format: html
 draft: false
 jupyter: python3
