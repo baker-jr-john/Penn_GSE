@@ -424,4 +424,4 @@ The token-level probability evidence supports this: nucleus sampling maintains r
 
 ## Declaration of Generative AI Utilization
 
-During the preparation of this work, the author utilized Anthropic's Claude Opus 4.6. They reviewed and edited the content of this assignment as needed and takes full responsibility for it.
+During the preparation of this work, the author utilized Anthropic's Claude Opus 4.6. The author reviewed and edited the content of this assignment as needed and takes full responsibility for it.
