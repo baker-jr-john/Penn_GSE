@@ -21,7 +21,13 @@
   {
     "listing": "/educ_5919_001/index.html",
     "items": [
-      "/educ_5919_001/decoding_strategies_lab/index.html"
+      "/educ_5919_001/assignments/index.html"
+    ]
+  },
+  {
+    "listing": "/educ_5919_001/assignments/index.html",
+    "items": [
+      "/educ_5919_001/assignments/decoding_strategies_lab/index.html"
     ]
   },
   {
