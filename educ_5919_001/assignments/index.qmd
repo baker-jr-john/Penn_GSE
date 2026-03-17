@@ -1,6 +1,6 @@
 ---
 pagetitle: "John Baker – Learning Analytics & AI"
-title: "Deep Learning & Transformer Models"
+title: "Assignments"
 listing: 
   contents:
     - "*/index.qmd"

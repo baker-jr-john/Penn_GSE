@@ -88,7 +88,7 @@
     "href": "educ_5919_001/index.html",
     "title": "Deep Learning & Transformer Models",
     "section": "",
-    "text": "Deep Learning & Transformer Models\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Assignments\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "educ_5919_001/assignments/decoding_strategies_lab/index.html",
@@ -156,7 +156,7 @@
   {
     "objectID": "educ_5919_001/assignments/index.html",
     "href": "educ_5919_001/assignments/index.html",
-    "title": "Deep Learning & Transformer Models",
+    "title": "Assignments",
     "section": "",
     "text": "Decoding Strategies Lab: Teacher Feedback Generation\n\n\nExploring how greedy search, beam search, top-k sampling, and nucleus sampling shape GPT-2 generated teacher feedback—with token-level probability analysis and a classroom recommendation.\n\n\n\n\n\nMarch 16, 2026\n\n\nJohn Baker\n\n\n\n\n\nNo matching items"
   },
