@@ -205,7 +205,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>What GPT-2 does during generation:</strong> GPT-2 is an autoregressive language model. Given a sequence of tokens, it predicts a probability distribution over the entire vocabulary for the <em>next</em> token. It then selects a token from that distribution, appends it to the sequence, and repeats. Text is generated one token at a time.</p>
 <p><strong>Logits and probabilities:</strong> At each generation step, the model outputs a vector of raw scores called <strong>logits</strong> — one per vocabulary token. These are not probabilities yet. Applying the <strong>softmax</strong> function converts logits into a valid probability distribution (values between 0 and 1 that sum to 1). A token with a high probability is one the model considers likely given the preceding context.</p>
 <p><strong>Why decoding matters:</strong> The same model with the same prompt can produce very different text depending on <em>how</em> we select the next token from the probability distribution. A deterministic strategy (greedy) always picks the top token, while sampling strategies introduce randomness. This choice directly affects whether the output is repetitive, creative, coherent, or surprising — all of which matter when generating text for educational settings like teacher feedback.</p>
-<div id="bbc59dfe" class="cell" data-execution_count="1">
+<div id="2bc29f9d" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install compatible dependencies (only runs if transformers is not yet installed)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> importlib.util</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> importlib.util.find_spec(<span class="st">"transformers"</span>) <span class="kw">is</span> <span class="va">None</span>:</span>
@@ -252,7 +252,7 @@ Vocabulary size: 50,257</code></pre>
 <section id="prompt-family-teacher-feedback" class="level2">
 <h2 class="anchored" data-anchor-id="prompt-family-teacher-feedback">Prompt Family: Teacher Feedback</h2>
 <p>We use a family of three prompts that simulate <strong>teacher feedback on student essays</strong>. These prompts are educationally relevant because feedback is one of the most common and impactful uses of language in classrooms. Each prompt begins a feedback sentence that the model must complete, letting us observe how different decoding strategies shape the tone, specificity, and coherence of the generated feedback.</p>
-<div id="47a3f4db" class="cell" data-execution_count="2">
+<div id="8ddb12ff" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>prompts <span class="op">=</span> [</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Teacher feedback on a student essay: Your claim is interesting, but"</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Teacher feedback on a student essay: You are close, but your reasoning needs"</span>,</span>
@@ -267,7 +267,7 @@ Prompt 2: "Teacher feedback on a student essay: You are close, but your reasonin
 Prompt 3: "Teacher feedback on a student essay: One thing to revise in this paragraph is"</code></pre>
 </div>
 </div>
-<div id="be6e80e9" class="cell" data-execution_count="3">
+<div id="3bbca319" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_and_analyze(prompt, <span class="op">**</span>generate_kwargs):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Generate text from a prompt using model.generate() with output_scores=True.</span></span>
@@ -366,7 +366,7 @@ Prompt 3: "Teacher feedback on a student essay: One thing to revise in this para
 <section id="greedy-search" class="level2">
 <h2 class="anchored" data-anchor-id="greedy-search">Greedy Search</h2>
 <p><strong>How it works:</strong> At each step, greedy search selects the single token with the highest probability. It is deterministic — the same prompt always produces the same output. This makes it predictable and consistent, but it can lead to repetitive or generic text because it never explores lower-probability alternatives that might produce more natural language.</p>
-<div id="a59d3ab7" class="cell" data-execution_count="4">
+<div id="c4412870" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"GREEDY SEARCH"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
@@ -379,11 +379,7 @@ Prompt 3: "Teacher feedback on a student essay: One thing to revise in this para
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">--- Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> ---"</span>)</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    display_results(prompt, text, tokens, probs)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    plot_token_probabilities(tokens, probs, <span class="ss">f"Greedy Search — Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Interpretation: Greedy search produces high-confidence tokens early on,"</span>)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"but can fall into repetitive loops. The probability bars tend to stay"</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"moderate-to-high since the model always picks its top prediction."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    plot_token_probabilities(tokens, probs, <span class="ss">f"Greedy Search — Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>======================================================================
 GREEDY SEARCH
@@ -443,41 +439,32 @@ Min token probability: 0.020
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Interpretation: Greedy search produces high-confidence tokens early on,
-but can fall into repetitive loops. The probability bars tend to stay
-moderate-to-high since the model always picks its top prediction.</code></pre>
 </div>
-</div>
+<p><strong>Interpretation:</strong> Greedy search produces high-confidence tokens early on, but can fall into repetitive loops. The probability bars tend to stay moderate-to-high since the model always picks its top prediction.</p>
 </section>
 <section id="beam-search" class="level2">
 <h2 class="anchored" data-anchor-id="beam-search">Beam Search</h2>
 <p><strong>How it works:</strong> Beam search maintains multiple candidate sequences (“beams”) in parallel. At each step, it expands each beam with the top candidates and keeps only the highest-scoring sequences overall. The final output is the sequence with the best cumulative score. This often produces more globally coherent text than greedy search. We also use <code>no_repeat_ngram_size=2</code> to prevent the model from repeating the same bigram, which helps reduce the repetitive loops that GPT-2 is prone to.</p>
-<div id="5cbeff66" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"BEAM SEARCH (num_beams=5, no_repeat_ngram_size=2)"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>beam_results <span class="op">=</span> []</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, prompt <span class="kw">in</span> <span class="bu">enumerate</span>(prompts, <span class="dv">1</span>):</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    text, tokens, probs <span class="op">=</span> generate_and_analyze(</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        prompt,</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        num_beams<span class="op">=</span><span class="dv">5</span>,</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        no_repeat_ngram_size<span class="op">=</span><span class="dv">2</span>,</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        early_stopping<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        do_sample<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    beam_results.append((prompt, text, tokens, probs))</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">--- Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> ---"</span>)</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    display_results(prompt, text, tokens, probs)</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    plot_token_probabilities(tokens, probs, <span class="ss">f"Beam Search — Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Interpretation: Beam search explores multiple paths and often produces"</span>)</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"more coherent sequences than greedy. The no-repeat constraint prevents"</span>)</span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"loops, but probabilities can dip when the model is forced away from its"</span>)</span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"top choice to avoid repetition."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e4270db1" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"BEAM SEARCH (num_beams=5, no_repeat_ngram_size=2)"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>beam_results <span class="op">=</span> []</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, prompt <span class="kw">in</span> <span class="bu">enumerate</span>(prompts, <span class="dv">1</span>):</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    text, tokens, probs <span class="op">=</span> generate_and_analyze(</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        prompt,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        num_beams<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        no_repeat_ngram_size<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        early_stopping<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        do_sample<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    beam_results.append((prompt, text, tokens, probs))</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">--- Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> ---"</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    display_results(prompt, text, tokens, probs)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    plot_token_probabilities(tokens, probs, <span class="ss">f"Beam Search — Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>======================================================================
 BEAM SEARCH (num_beams=5, no_repeat_ngram_size=2)
@@ -535,43 +522,33 @@ Min token probability: 0.053
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Interpretation: Beam search explores multiple paths and often produces
-more coherent sequences than greedy. The no-repeat constraint prevents
-loops, but probabilities can dip when the model is forced away from its
-top choice to avoid repetition.</code></pre>
 </div>
-</div>
+<p><strong>Interpretation:</strong> Beam search explores multiple paths and often produces more coherent sequences than greedy. The no-repeat constraint prevents loops, but probabilities can dip when the model is forced away from its top choice to avoid repetition.</p>
 </section>
 <section id="top-k-sampling" class="level2">
 <h2 class="anchored" data-anchor-id="top-k-sampling">Top-k Sampling</h2>
 <p><strong>How it works:</strong> At each step, top-k sampling restricts the candidate pool to the <strong>k most probable tokens</strong>, then samples randomly from that reduced distribution. This introduces variety while preventing the model from selecting extremely unlikely tokens. A lower temperature (0.8) sharpens the distribution, making higher-probability tokens more likely to be chosen while still allowing some diversity.</p>
-<div id="addb6db3" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"TOP-K SAMPLING (k=50, temperature=0.8)"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>topk_results <span class="op">=</span> []</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)  <span class="co"># Reset seed for reproducibility</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, prompt <span class="kw">in</span> <span class="bu">enumerate</span>(prompts, <span class="dv">1</span>):</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    text, tokens, probs <span class="op">=</span> generate_and_analyze(</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        prompt,</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        do_sample<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>        top_k<span class="op">=</span><span class="dv">50</span>,</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        temperature<span class="op">=</span><span class="fl">0.8</span>,</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    topk_results.append((prompt, text, tokens, probs))</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">--- Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> ---"</span>)</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    display_results(prompt, text, tokens, probs)</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    plot_token_probabilities(tokens, probs, <span class="ss">f"Top-k Sampling (k=50) — Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Interpretation: Top-k sampling produces more varied and natural-sounding"</span>)</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"text. Token probabilities are generally lower than greedy/beam because"</span>)</span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"the model sometimes selects tokens that are not the single most likely,"</span>)</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"introducing controlled randomness."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e9ed809e" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"TOP-K SAMPLING (k=50, temperature=0.8)"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>topk_results <span class="op">=</span> []</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)  <span class="co"># Reset seed for reproducibility</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, prompt <span class="kw">in</span> <span class="bu">enumerate</span>(prompts, <span class="dv">1</span>):</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    text, tokens, probs <span class="op">=</span> generate_and_analyze(</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        prompt,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        do_sample<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        top_k<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        temperature<span class="op">=</span><span class="fl">0.8</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    topk_results.append((prompt, text, tokens, probs))</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">--- Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> ---"</span>)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    display_results(prompt, text, tokens, probs)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    plot_token_probabilities(tokens, probs, <span class="ss">f"Top-k Sampling (k=50) — Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>======================================================================
 TOP-K SAMPLING (k=50, temperature=0.8)
@@ -627,44 +604,34 @@ Min token probability: 0.002
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Interpretation: Top-k sampling produces more varied and natural-sounding
-text. Token probabilities are generally lower than greedy/beam because
-the model sometimes selects tokens that are not the single most likely,
-introducing controlled randomness.</code></pre>
 </div>
-</div>
+<p><strong>Interpretation:</strong> Top-k sampling produces more varied and natural-sounding text. Token probabilities are generally lower than greedy/beam because the model sometimes selects tokens that are not the single most likely, introducing controlled randomness.</p>
 </section>
 <section id="nucleus-top-p-sampling" class="level2">
 <h2 class="anchored" data-anchor-id="nucleus-top-p-sampling">Nucleus (Top-p) Sampling</h2>
 <p><strong>How it works:</strong> Nucleus sampling dynamically adjusts the candidate pool at each step. Instead of a fixed number of tokens (top-k), it includes the smallest set of tokens whose cumulative probability exceeds a threshold <strong>p</strong>. When the model is confident (one token dominates), the pool is small; when the model is uncertain (many tokens share probability), the pool is larger. This adapts to the model’s confidence at each position, making it particularly effective at producing natural-sounding text.</p>
-<div id="75a9a92c" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NUCLEUS (TOP-P) SAMPLING (p=0.9, temperature=0.8)"</span>)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>nucleus_results <span class="op">=</span> []</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)  <span class="co"># Reset seed for reproducibility</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, prompt <span class="kw">in</span> <span class="bu">enumerate</span>(prompts, <span class="dv">1</span>):</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    text, tokens, probs <span class="op">=</span> generate_and_analyze(</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        prompt,</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        do_sample<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        top_p<span class="op">=</span><span class="fl">0.9</span>,</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        top_k<span class="op">=</span><span class="dv">0</span>,  <span class="co"># Disable top-k to use pure nucleus sampling</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        temperature<span class="op">=</span><span class="fl">0.8</span>,</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    nucleus_results.append((prompt, text, tokens, probs))</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">--- Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> ---"</span>)</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    display_results(prompt, text, tokens, probs)</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    plot_token_probabilities(tokens, probs, <span class="ss">f"Nucleus Sampling (p=0.9) — Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Interpretation: Nucleus sampling adapts the candidate pool to the model's"</span>)</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"confidence at each step. This tends to produce natural-sounding text while"</span>)</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"avoiding the most extreme low-probability tokens that pure sampling might"</span>)</span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"introduce."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="bb998dec" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NUCLEUS (TOP-P) SAMPLING (p=0.9, temperature=0.8)"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>nucleus_results <span class="op">=</span> []</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)  <span class="co"># Reset seed for reproducibility</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, prompt <span class="kw">in</span> <span class="bu">enumerate</span>(prompts, <span class="dv">1</span>):</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    text, tokens, probs <span class="op">=</span> generate_and_analyze(</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        prompt,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>        do_sample<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>        top_p<span class="op">=</span><span class="fl">0.9</span>,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        top_k<span class="op">=</span><span class="dv">0</span>,  <span class="co"># Disable top-k to use pure nucleus sampling</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        temperature<span class="op">=</span><span class="fl">0.8</span>,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    nucleus_results.append((prompt, text, tokens, probs))</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">--- Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> ---"</span>)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    display_results(prompt, text, tokens, probs)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    plot_token_probabilities(tokens, probs, <span class="ss">f"Nucleus Sampling (p=0.9) — Prompt </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>======================================================================
 NUCLEUS (TOP-P) SAMPLING (p=0.9, temperature=0.8)
@@ -724,13 +691,8 @@ Min token probability: 0.002
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Interpretation: Nucleus sampling adapts the candidate pool to the model's
-confidence at each step. This tends to produce natural-sounding text while
-avoiding the most extreme low-probability tokens that pure sampling might
-introduce.</code></pre>
 </div>
-</div>
+<p><strong>Interpretation:</strong> Nucleus sampling adapts the candidate pool to the model’s confidence at each step. This tends to produce natural-sounding text while avoiding the most extreme low-probability tokens that pure sampling might introduce.</p>
 </section>
 <section id="comparison-and-interpretation" class="level2">
 <h2 class="anchored" data-anchor-id="comparison-and-interpretation">Comparison and Interpretation</h2>
@@ -745,81 +707,82 @@ introduce.</code></pre>
 <li><p><strong>Token probability stability:</strong> Greedy search shows consistently high probabilities (always picking the top token). Beam search shows occasional dips where the no-repeat constraint forces less likely tokens. Sampling strategies show more variable probabilities throughout, reflecting their random exploration of the distribution.</p></li>
 <li><p><strong>Classroom implications:</strong> For teacher feedback tools, we need a balance between consistency (so feedback is always appropriate) and naturalness (so feedback does not sound robotic). Very low-probability tokens may signal incoherent or off-topic text, which would be inappropriate in a classroom.</p></li>
 </ul>
-<div id="a590683f" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Comparison Table ---</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>strategy_names <span class="op">=</span> [<span class="st">'Greedy'</span>, <span class="st">'Beam Search'</span>, <span class="st">'Top-k (k=50)'</span>, <span class="st">'Nucleus (p=0.9)'</span>]</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>all_results <span class="op">=</span> [greedy_results, beam_results, topk_results, nucleus_results]</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Build comparison DataFrame for Prompt 1</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"COMPARISON TABLE — Prompt 1"</span>)</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>comparison_rows <span class="op">=</span> []</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, results <span class="kw">in</span> <span class="bu">zip</span>(strategy_names, all_results):</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    prompt, text, tokens, probs <span class="op">=</span> results[<span class="dv">0</span>]  <span class="co"># Prompt 1</span></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    continuation <span class="op">=</span> text[<span class="bu">len</span>(prompt):].strip()</span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Truncate for display</span></span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(continuation) <span class="op">&gt;</span> <span class="dv">120</span>:</span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>        continuation <span class="op">=</span> continuation[:<span class="dv">120</span>] <span class="op">+</span> <span class="st">"..."</span></span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>    comparison_rows.append({</span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Strategy'</span>: name,</span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Generated Feedback'</span>: continuation,</span>
-<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Avg Prob'</span>: <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>mean(probs)<span class="sc">:.3f}</span><span class="ss">"</span>,</span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Min Prob'</span>: <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">min</span>(probs)<span class="sc">:.3f}</span><span class="ss">"</span>,</span>
-<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>df_compare <span class="op">=</span> pd.DataFrame(comparison_rows)</span>
-<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_compare.to_string(index<span class="op">=</span><span class="va">False</span>))</span>
-<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Average Token Probability Comparison (colorblind-friendly) ---</span></span>
-<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">5</span>))</span>
-<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> prompt_idx <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
-<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axes[prompt_idx]</span>
-<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>    avg_probs <span class="op">=</span> []</span>
-<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>    min_probs <span class="op">=</span> []</span>
-<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> results <span class="kw">in</span> all_results:</span>
-<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>        _, _, tokens, probs <span class="op">=</span> results[prompt_idx]</span>
-<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>        avg_probs.append(np.mean(probs))</span>
-<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a>        min_probs.append(np.<span class="bu">min</span>(probs))</span>
-<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="bu">range</span>(<span class="bu">len</span>(strategy_names))</span>
-<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a>    bar_width <span class="op">=</span> <span class="fl">0.35</span></span>
-<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>    bars1 <span class="op">=</span> ax.bar([xi <span class="op">-</span> bar_width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> xi <span class="kw">in</span> x], avg_probs, bar_width,</span>
-<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span><span class="st">'Avg Probability'</span>, color<span class="op">=</span><span class="st">'#0072B2'</span>)</span>
-<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a>    bars2 <span class="op">=</span> ax.bar([xi <span class="op">+</span> bar_width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> xi <span class="kw">in</span> x], min_probs, bar_width,</span>
-<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span><span class="st">'Min Probability'</span>, color<span class="op">=</span><span class="st">'#D55E00'</span>)</span>
-<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Probability'</span>)</span>
-<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'Prompt </span><span class="sc">{</span>prompt_idx <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks(<span class="bu">list</span>(x))</span>
-<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a>    ax.set_xticklabels(strategy_names, rotation<span class="op">=</span><span class="dv">30</span>, ha<span class="op">=</span><span class="st">'right'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="dv">0</span>, <span class="fl">1.0</span>)</span>
-<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a>    ax.legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a>    ax.grid(axis<span class="op">=</span><span class="st">'y'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Average and Minimum Token Probabilities by Strategy'</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb28-56"><a href="#cb28-56" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb28-57"><a href="#cb28-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-58"><a href="#cb28-58" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Token Probability Trajectory Comparison (Prompt 1, colorblind-friendly) ---</span></span>
-<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
-<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-61"><a href="#cb28-61" aria-hidden="true" tabindex="-1"></a>colors_line <span class="op">=</span> [<span class="st">'#000000'</span>, <span class="st">'#0072B2'</span>, <span class="st">'#009E73'</span>, <span class="st">'#E69F00'</span>]</span>
-<span id="cb28-62"><a href="#cb28-62" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx, (name, results) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(strategy_names, all_results)):</span>
-<span id="cb28-63"><a href="#cb28-63" aria-hidden="true" tabindex="-1"></a>    _, _, tokens, probs <span class="op">=</span> results[<span class="dv">0</span>]  <span class="co"># Prompt 1</span></span>
-<span id="cb28-64"><a href="#cb28-64" aria-hidden="true" tabindex="-1"></a>    ax.plot(<span class="bu">range</span>(<span class="bu">len</span>(probs)), probs, marker<span class="op">=</span><span class="st">'o'</span>, markersize<span class="op">=</span><span class="dv">4</span>,</span>
-<span id="cb28-65"><a href="#cb28-65" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span>name, color<span class="op">=</span>colors_line[idx], alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
-<span id="cb28-66"><a href="#cb28-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-67"><a href="#cb28-67" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Token Position'</span>)</span>
-<span id="cb28-68"><a href="#cb28-68" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Probability'</span>)</span>
-<span id="cb28-69"><a href="#cb28-69" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Token Probability Trajectory — Prompt 1 (All Strategies)'</span>)</span>
-<span id="cb28-70"><a href="#cb28-70" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb28-71"><a href="#cb28-71" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="fl">1.05</span>)</span>
-<span id="cb28-72"><a href="#cb28-72" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb28-73"><a href="#cb28-73" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb28-74"><a href="#cb28-74" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="8b52884b" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Comparison Table ---</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>strategy_names <span class="op">=</span> [<span class="st">'Greedy'</span>, <span class="st">'Beam Search'</span>, <span class="st">'Top-k (k=50)'</span>, <span class="st">'Nucleus (p=0.9)'</span>]</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>all_results <span class="op">=</span> [greedy_results, beam_results, topk_results, nucleus_results]</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Build comparison DataFrame for Prompt 1</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"COMPARISON TABLE — Prompt 1"</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>comparison_rows <span class="op">=</span> []</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, results <span class="kw">in</span> <span class="bu">zip</span>(strategy_names, all_results):</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    prompt, text, tokens, probs <span class="op">=</span> results[<span class="dv">0</span>]  <span class="co"># Prompt 1</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    continuation <span class="op">=</span> text[<span class="bu">len</span>(prompt):].strip()</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Truncate for display</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(continuation) <span class="op">&gt;</span> <span class="dv">120</span>:</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>        continuation <span class="op">=</span> continuation[:<span class="dv">120</span>] <span class="op">+</span> <span class="st">"..."</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    comparison_rows.append({</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Strategy'</span>: name,</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Generated Feedback'</span>: continuation,</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Avg Prob'</span>: <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>mean(probs)<span class="sc">:.3f}</span><span class="ss">"</span>,</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Min Prob'</span>: <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">min</span>(probs)<span class="sc">:.3f}</span><span class="ss">"</span>,</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>df_compare <span class="op">=</span> pd.DataFrame(comparison_rows)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_compare.to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Average Token Probability Comparison (colorblind-friendly) ---</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">5</span>))</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> prompt_idx <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axes[prompt_idx]</span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>    avg_probs <span class="op">=</span> []</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>    min_probs <span class="op">=</span> []</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> results <span class="kw">in</span> all_results:</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>        _, _, tokens, probs <span class="op">=</span> results[prompt_idx]</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>        avg_probs.append(np.mean(probs))</span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>        min_probs.append(np.<span class="bu">min</span>(probs))</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="bu">range</span>(<span class="bu">len</span>(strategy_names))</span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>    bar_width <span class="op">=</span> <span class="fl">0.35</span></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>    bars1 <span class="op">=</span> ax.bar([xi <span class="op">-</span> bar_width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> xi <span class="kw">in</span> x], avg_probs, bar_width,</span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span><span class="st">'Avg Probability'</span>, color<span class="op">=</span><span class="st">'#0072B2'</span>)</span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>    bars2 <span class="op">=</span> ax.bar([xi <span class="op">+</span> bar_width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> xi <span class="kw">in</span> x], min_probs, bar_width,</span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span><span class="st">'Min Probability'</span>, color<span class="op">=</span><span class="st">'#D55E00'</span>)</span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Probability'</span>)<span class="op">;</span></span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'Prompt </span><span class="sc">{</span>prompt_idx <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">'</span>)<span class="op">;</span></span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks(<span class="bu">list</span>(x))<span class="op">;</span></span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>    ax.set_xticklabels(strategy_names, rotation<span class="op">=</span><span class="dv">30</span>, ha<span class="op">=</span><span class="st">'right'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)<span class="op">;</span></span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="dv">0</span>, <span class="fl">1.0</span>)<span class="op">;</span></span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a>    ax.legend(fontsize<span class="op">=</span><span class="dv">8</span>)<span class="op">;</span></span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a>    ax.grid(axis<span class="op">=</span><span class="st">'y'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Average and Minimum Token Probabilities by Strategy'</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)<span class="op">;</span></span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>plt.show()<span class="op">;</span></span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Token Probability Trajectory Comparison (Prompt 1, colorblind-friendly) ---</span></span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a>colors_line <span class="op">=</span> [<span class="st">'#000000'</span>, <span class="st">'#0072B2'</span>, <span class="st">'#009E73'</span>, <span class="st">'#E69F00'</span>]</span>
+<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx, (name, results) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(strategy_names, all_results)):</span>
+<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a>    _, _, tokens, probs <span class="op">=</span> results[<span class="dv">0</span>]  <span class="co"># Prompt 1</span></span>
+<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>    ax.plot(<span class="bu">range</span>(<span class="bu">len</span>(probs)), probs, marker<span class="op">=</span><span class="st">'o'</span>, markersize<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span>name, color<span class="op">=</span>colors_line[idx], alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Token Position'</span>)<span class="op">;</span></span>
+<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Probability'</span>)<span class="op">;</span></span>
+<span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Token Probability Trajectory — Prompt 1 (All Strategies)'</span>)<span class="op">;</span></span>
+<span id="cb24-71"><a href="#cb24-71" aria-hidden="true" tabindex="-1"></a>ax.legend()<span class="op">;</span></span>
+<span id="cb24-72"><a href="#cb24-72" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="fl">1.05</span>)<span class="op">;</span></span>
+<span id="cb24-73"><a href="#cb24-73" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb24-74"><a href="#cb24-74" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb24-75"><a href="#cb24-75" aria-hidden="true" tabindex="-1"></a>plt.show()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>======================================================================
 COMPARISON TABLE — Prompt 1
@@ -830,65 +793,17 @@ COMPARISON TABLE — Prompt 1
    Top-k (k=50)   it's not in the context of the survey. You've put in good-faith efforts, but there's a problem with your claim: You're a...    0.308    0.000
 Nucleus (p=0.9) it's not final.\n\nD. I see a friend writing something with a big, understating "Growth for the Academic World" banner in ...    0.270    0.001</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0, 0.5, 'Probability')</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0.5, 1.0, 'Prompt 1')</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>[Text(0, 0, 'Greedy'),
- Text(1, 0, 'Beam Search'),
- Text(2, 0, 'Top-k (k=50)'),
- Text(3, 0, 'Nucleus (p=0.9)')]</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0, 0.5, 'Probability')</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0.5, 1.0, 'Prompt 2')</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>[Text(0, 0, 'Greedy'),
- Text(1, 0, 'Beam Search'),
- Text(2, 0, 'Top-k (k=50)'),
- Text(3, 0, 'Nucleus (p=0.9)')]</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0, 0.5, 'Probability')</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0.5, 1.0, 'Prompt 3')</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>[Text(0, 0, 'Greedy'),
- Text(1, 0, 'Beam Search'),
- Text(2, 0, 'Top-k (k=50)'),
- Text(3, 0, 'Nucleus (p=0.9)')]</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0.5, 0.98, 'Average and Minimum Token Probabilities by Strategy')</code></pre>
-</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-9-output-12.png" width="1718" height="475" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-9-output-2.png" width="1718" height="475" class="figure-img"></p>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0.5, 0, 'Token Position')</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0, 0.5, 'Probability')</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>Text(0.5, 1.0, 'Token Probability Trajectory — Prompt 1 (All Strategies)')</code></pre>
-</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-9-output-16.png" width="1334" height="470" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-9-output-3.png" width="1334" height="470" class="figure-img"></p>
 </figure>
 </div>
 </div>

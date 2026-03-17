@@ -204,11 +204,9 @@ for i, prompt in enumerate(prompts, 1):
     print(f"\n--- Prompt {i} ---")
     display_results(prompt, text, tokens, probs)
     plot_token_probabilities(tokens, probs, f"Greedy Search — Prompt {i}")
-
-print("Interpretation: Greedy search produces high-confidence tokens early on,")
-print("but can fall into repetitive loops. The probability bars tend to stay")
-print("moderate-to-high since the model always picks its top prediction.")
 ```
+
+**Interpretation:** Greedy search produces high-confidence tokens early on, but can fall into repetitive loops. The probability bars tend to stay moderate-to-high since the model always picks its top prediction.
 
 ## Beam Search
 
@@ -234,12 +232,9 @@ for i, prompt in enumerate(prompts, 1):
     print(f"\n--- Prompt {i} ---")
     display_results(prompt, text, tokens, probs)
     plot_token_probabilities(tokens, probs, f"Beam Search — Prompt {i}")
-
-print("Interpretation: Beam search explores multiple paths and often produces")
-print("more coherent sequences than greedy. The no-repeat constraint prevents")
-print("loops, but probabilities can dip when the model is forced away from its")
-print("top choice to avoid repetition.")
 ```
+
+**Interpretation:** Beam search explores multiple paths and often produces more coherent sequences than greedy. The no-repeat constraint prevents loops, but probabilities can dip when the model is forced away from its top choice to avoid repetition.
 
 ## Top-k Sampling
 
@@ -266,12 +261,9 @@ for i, prompt in enumerate(prompts, 1):
     print(f"\n--- Prompt {i} ---")
     display_results(prompt, text, tokens, probs)
     plot_token_probabilities(tokens, probs, f"Top-k Sampling (k=50) — Prompt {i}")
-
-print("Interpretation: Top-k sampling produces more varied and natural-sounding")
-print("text. Token probabilities are generally lower than greedy/beam because")
-print("the model sometimes selects tokens that are not the single most likely,")
-print("introducing controlled randomness.")
 ```
+
+**Interpretation:** Top-k sampling produces more varied and natural-sounding text. Token probabilities are generally lower than greedy/beam because the model sometimes selects tokens that are not the single most likely, introducing controlled randomness.
 
 ## Nucleus (Top-p) Sampling
 
@@ -299,12 +291,9 @@ for i, prompt in enumerate(prompts, 1):
     print(f"\n--- Prompt {i} ---")
     display_results(prompt, text, tokens, probs)
     plot_token_probabilities(tokens, probs, f"Nucleus Sampling (p=0.9) — Prompt {i}")
-
-print("Interpretation: Nucleus sampling adapts the candidate pool to the model's")
-print("confidence at each step. This tends to produce natural-sounding text while")
-print("avoiding the most extreme low-probability tokens that pure sampling might")
-print("introduce.")
 ```
+
+**Interpretation:** Nucleus sampling adapts the candidate pool to the model's confidence at each step. This tends to produce natural-sounding text while avoiding the most extreme low-probability tokens that pure sampling might introduce.
 
 ## Comparison and Interpretation
 
@@ -370,17 +359,18 @@ for prompt_idx in range(3):
     bars2 = ax.bar([xi + bar_width/2 for xi in x], min_probs, bar_width,
                    label='Min Probability', color='#D55E00')
 
-    ax.set_ylabel('Probability')
-    ax.set_title(f'Prompt {prompt_idx + 1}')
-    ax.set_xticks(list(x))
-    ax.set_xticklabels(strategy_names, rotation=30, ha='right', fontsize=8)
-    ax.set_ylim(0, 1.0)
-    ax.legend(fontsize=8)
+    ax.set_ylabel('Probability');
+    ax.set_title(f'Prompt {prompt_idx + 1}');
+    ax.set_xticks(list(x));
+    ax.set_xticklabels(strategy_names, rotation=30, ha='right', fontsize=8);
+    ax.set_ylim(0, 1.0);
+    ax.legend(fontsize=8);
     ax.grid(axis='y', alpha=0.3)
 
-fig.suptitle('Average and Minimum Token Probabilities by Strategy', fontsize=14, fontweight='bold')
+fig.suptitle('Average and Minimum Token Probabilities by Strategy', fontsize=14, fontweight='bold');
 plt.tight_layout()
-plt.show()
+plt.show();
+
 
 # --- Token Probability Trajectory Comparison (Prompt 1, colorblind-friendly) ---
 fig, ax = plt.subplots(figsize=(14, 5))
@@ -391,14 +381,14 @@ for idx, (name, results) in enumerate(zip(strategy_names, all_results)):
     ax.plot(range(len(probs)), probs, marker='o', markersize=4,
             label=name, color=colors_line[idx], alpha=0.8)
 
-ax.set_xlabel('Token Position')
-ax.set_ylabel('Probability')
-ax.set_title('Token Probability Trajectory — Prompt 1 (All Strategies)')
-ax.legend()
-ax.set_ylim(0, 1.05)
+ax.set_xlabel('Token Position');
+ax.set_ylabel('Probability');
+ax.set_title('Token Probability Trajectory — Prompt 1 (All Strategies)');
+ax.legend();
+ax.set_ylim(0, 1.05);
 ax.grid(alpha=0.3)
 plt.tight_layout()
-plt.show()
+plt.show();
 ```
 
 ## Classroom Recommendation
