@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Baker">
+<meta name="dcterms.date" content="2026-04-03">
+<meta name="keywords" content="diffusion models, classifier-free guidance, scientific diagrams, image generation control, stable diffusion">
+<meta name="description" content="A Diffusion Model Exploration Using the Water Cycle">
+
+<title>John Baker – Learning Analytics &amp; AI – Penn GSE</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../simplified-shield.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-155fcadebb6b0ed3da03ebb8aeb5cba4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#background-and-setup" id="toc-background-and-setup" class="nav-link active" data-scroll-target="#background-and-setup">Background and Setup</a>
+  <ul class="collapse">
+  <li><a href="#how-diffusion-models-work" id="toc-how-diffusion-models-work" class="nav-link" data-scroll-target="#how-diffusion-models-work">How Diffusion Models Work</a></li>
+  <li><a href="#what-guidance-scale-does" id="toc-what-guidance-scale-does" class="nav-link" data-scroll-target="#what-guidance-scale-does">What Guidance Scale Does</a></li>
+  <li><a href="#three-control-strategies" id="toc-three-control-strategies" class="nav-link" data-scroll-target="#three-control-strategies">Three Control Strategies</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  </ul></li>
+  <li><a href="#baseline-text-to-image-generation" id="toc-baseline-text-to-image-generation" class="nav-link" data-scroll-target="#baseline-text-to-image-generation">Baseline Text-to-Image Generation</a></li>
+  <li><a href="#guidance-scale-exploration" id="toc-guidance-scale-exploration" class="nav-link" data-scroll-target="#guidance-scale-exploration">Guidance Scale Exploration</a></li>
+  <li><a href="#method-comparison" id="toc-method-comparison" class="nav-link" data-scroll-target="#method-comparison">Method Comparison</a>
+  <ul class="collapse">
+  <li><a href="#image-to-image" id="toc-image-to-image" class="nav-link" data-scroll-target="#image-to-image">Image-to-Image</a></li>
+  <li><a href="#inpainting" id="toc-inpainting" class="nav-link" data-scroll-target="#inpainting">Inpainting</a></li>
+  <li><a href="#controlnet-canny-edge" id="toc-controlnet-canny-edge" class="nav-link" data-scroll-target="#controlnet-canny-edge">ControlNet (Canny Edge)</a></li>
+  </ul></li>
+  <li><a href="#comparison-and-interpretation" id="toc-comparison-and-interpretation" class="nav-link" data-scroll-target="#comparison-and-interpretation">Comparison and Interpretation</a></li>
+  <li><a href="#scientific-evaluation" id="toc-scientific-evaluation" class="nav-link" data-scroll-target="#scientific-evaluation">Scientific Evaluation</a></li>
+  <li><a href="#classroom-recommendation" id="toc-classroom-recommendation" class="nav-link" data-scroll-target="#classroom-recommendation">Classroom Recommendation</a></li>
+  <li><a href="#declaration-of-generative-ai-utilization" id="toc-declaration-of-generative-ai-utilization" class="nav-link" data-scroll-target="#declaration-of-generative-ai-utilization">Declaration of Generative AI Utilization</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Generation Control Strategies for Scientific Diagrams</h1>
+</div>
+
+<div>
+  <div class="description">
+    A Diffusion Model Exploration Using the Water Cycle
+  </div>
+</div>
+
+<div class="quarto-title-meta-author column-page-left">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">John Baker <a href="mailto:jbaker1@upenn.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.gse.upenn.edu/">
+            Penn GSE: University of Pennsylvania Graduate School of Education
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta column-page-left">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 3, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+<div>
+  <div class="keywords">
+    <div class="block-title">Keywords</div>
+    <p>diffusion models, classifier-free guidance, scientific diagrams, image generation control, stable diffusion</p>
+  </div>
+</div>
+
+</header>
+
+
+<blockquote class="blockquote">
+<p><strong>Note on compute:</strong> Image generation with SD 1.5 requires a GPU (CUDA or Apple Silicon MPS) for practical runtimes (~1–2 min per image). On CPU, each generation takes 20–40 minutes. If running locally without a GPU, generate the images first in <strong>Google Colab</strong> (free T4 GPU), download the <code>outputs/</code> folder, place it alongside this file, then render — the caching checks (<code>if os.path.exists(path)</code>) will skip regeneration and use the saved files.</p>
+</blockquote>
+<section id="background-and-setup" class="level2">
+<h2 class="anchored" data-anchor-id="background-and-setup">Background and Setup</h2>
+<section id="how-diffusion-models-work" class="level3">
+<h3 class="anchored" data-anchor-id="how-diffusion-models-work">How Diffusion Models Work</h3>
+<p>Diffusion models generate images by learning a <strong>reverse denoising process</strong>. During training, clean images are progressively corrupted with Gaussian noise until they become pure noise. The model learns to reverse this, starting from random noise and iteratively predicting and removing noise at each step to recover a coherent image.</p>
+<p>In inference, generation is guided by a text prompt through <strong>classifier-free guidance (CFG)</strong>. The model makes two predictions per step: one conditioned on the prompt and one unconditional. The final update blends them:</p>
+<p><span class="math display">\[\hat{\epsilon} = \epsilon_{\text{uncond}} + s \cdot (\epsilon_{\text{cond}} - \epsilon_{\text{uncond}})\]</span></p>
+<p>where <em>s</em> is the <strong>guidance scale</strong>. Larger <em>s</em> pushes the output harder toward the prompt.</p>
+</section>
+<section id="what-guidance-scale-does" class="level3">
+<h3 class="anchored" data-anchor-id="what-guidance-scale-does">What Guidance Scale Does</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Guidance Scale</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Low (2–5)</td>
+<td>Loosely follows prompt; images are varied and dreamlike</td>
+</tr>
+<tr class="even">
+<td>Medium (7–8)</td>
+<td>Balanced - the standard default</td>
+</tr>
+<tr class="odd">
+<td>High (10–15)</td>
+<td>Strictly follows prompt; can over-saturate or distort</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="three-control-strategies" class="level3">
+<h3 class="anchored" data-anchor-id="three-control-strategies">Three Control Strategies</h3>
+<p><strong>Image-to-Image (img2img):</strong> A reference image is partially noised to a chosen <code>strength</code> (0–1), then denoised conditioned on the prompt. Low strength keeps the output closer to the original; high strength allows more creative deviation, letting an existing diagram serve as a structural starting point.</p>
+<p><strong>Inpainting:</strong> A binary mask specifies which pixels to regenerate. Everything outside the mask is preserved; the masked region is filled in conditioned on the surrounding context plus the prompt. Useful for correcting or inserting specific components of an existing image.</p>
+<p><strong>ControlNet:</strong> A separate conditioning network encodes structural information from a control image (e.g., Canny edges, depth map, pose skeleton) and injects it at multiple layers of the diffusion process. ControlNet provides hard spatial constraints that persist throughout generation, working alongside the prompt rather than replacing it, making it the most powerful structural control method.</p>
+</section>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
+<div id="setup" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image, ImageDraw</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> diffusers <span class="im">import</span> (</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    StableDiffusionPipeline,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    StableDiffusionImg2ImgPipeline,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    StableDiffusionInpaintPipeline,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    StableDiffusionControlNetPipeline,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    ControlNetModel,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    UniPCMultistepScheduler,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>os.makedirs(<span class="st">"outputs"</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Device: CUDA &gt; MPS (Apple Silicon) &gt; CPU</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    DEVICE <span class="op">=</span> <span class="st">"cuda"</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    DTYPE  <span class="op">=</span> torch.float16</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> torch.backends.mps.is_available():</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    DEVICE <span class="op">=</span> <span class="st">"mps"</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    DTYPE  <span class="op">=</span> torch.float32</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    DEVICE <span class="op">=</span> <span class="st">"cpu"</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    DTYPE  <span class="op">=</span> torch.float32</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Device: </span><span class="sc">{</span>DEVICE<span class="sc">}</span><span class="ss"> | dtype: </span><span class="sc">{</span>DTYPE<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>MODEL_ID   <span class="op">=</span> <span class="st">"runwayml/stable-diffusion-v1-5"</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>INPAINT_ID <span class="op">=</span> <span class="st">"runwayml/stable-diffusion-inpainting"</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>CNET_ID    <span class="op">=</span> <span class="st">"lllyasviel/control_v11p_sd15_canny"</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>SEED     <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>STEPS    <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>IMG_SIZE <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>PROMPT_A <span class="op">=</span> (</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Clean 2D educational diagram of the water cycle with labeled processes, "</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">"showing evaporation, condensation, precipitation, and runoff, "</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"simple white background, illustration style"</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>PROMPT_B <span class="op">=</span> (</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Accurate middle school science diagram of the water cycle, "</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"clear directional arrows, labeled stages, blue sky and ocean, "</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">"neat infographic style"</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>NEG <span class="op">=</span> <span class="st">"photorealistic, photograph, 3D render, messy, blurry, ugly, deformed, text errors"</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Reference sketch used for img2img and ControlNet</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>ref_img <span class="op">=</span> Image.<span class="bu">open</span>(<span class="st">"images/reference_water_cycle.png"</span>).convert(<span class="st">"RGB"</span>).resize((IMG_SIZE, IMG_SIZE))</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_generator(seed<span class="op">=</span>SEED):</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    g <span class="op">=</span> torch.Generator(device<span class="op">=</span><span class="st">"cpu"</span>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    g.manual_seed(seed)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_images(images, titles, cols<span class="op">=</span><span class="va">None</span>, figsize<span class="op">=</span><span class="va">None</span>, suptitle<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Display a list of PIL images in a grid with titles."""</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(images)</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    cols <span class="op">=</span> cols <span class="kw">or</span> n</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> (n <span class="op">+</span> cols <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> cols</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    figsize <span class="op">=</span> figsize <span class="kw">or</span> (<span class="dv">5</span> <span class="op">*</span> cols, <span class="dv">5</span> <span class="op">*</span> rows)</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(rows, cols, figsize<span class="op">=</span>figsize)</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    axes <span class="op">=</span> np.array(axes).flatten()</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ax, img, title <span class="kw">in</span> <span class="bu">zip</span>(axes, images, titles):</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>        ax.imshow(img)</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>        ax.set_title(title, fontsize<span class="op">=</span><span class="dv">10</span>, pad<span class="op">=</span><span class="dv">6</span>)</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>        ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ax <span class="kw">in</span> axes[n:]:</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>        ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> suptitle:</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>        fig.suptitle(suptitle, fontsize<span class="op">=</span><span class="dv">13</span>, fontweight<span class="op">=</span><span class="st">"bold"</span>, y<span class="op">=</span><span class="fl">1.02</span>)</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="baseline-text-to-image-generation" class="level2">
+<h2 class="anchored" data-anchor-id="baseline-text-to-image-generation">Baseline Text-to-Image Generation</h2>
+<p>Both prompts are run with a guidance scale of 7.5 to establish a baseline before any structural conditioning is applied.</p>
+<div id="cell-baseline" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>baseline_paths <span class="op">=</span> [<span class="ss">f"outputs/baseline_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">.png"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>)]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>need_baseline <span class="op">=</span> <span class="kw">not</span> <span class="bu">all</span>(os.path.exists(p) <span class="cf">for</span> p <span class="kw">in</span> baseline_paths)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> need_baseline:</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    pipe <span class="op">=</span> StableDiffusionPipeline.from_pretrained(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        MODEL_ID, torch_dtype<span class="op">=</span>DTYPE, safety_checker<span class="op">=</span><span class="va">None</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    ).to(DEVICE)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    pipe.scheduler <span class="op">=</span> UniPCMultistepScheduler.from_config(pipe.scheduler.config)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    pipe.enable_attention_slicing()</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>baseline_imgs <span class="op">=</span> []</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, prompt <span class="kw">in</span> <span class="bu">enumerate</span>([PROMPT_A, PROMPT_B]):</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> baseline_paths[i]</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> os.path.exists(path):</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> Image.<span class="bu">open</span>(path)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> pipe(</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>            prompt,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>            negative_prompt<span class="op">=</span>NEG,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>            guidance_scale<span class="op">=</span><span class="fl">7.5</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>            num_inference_steps<span class="op">=</span>STEPS,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>            width<span class="op">=</span>IMG_SIZE,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>            height<span class="op">=</span>IMG_SIZE,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>            generator<span class="op">=</span>make_generator(),</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        ).images[<span class="dv">0</span>]</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        img.save(path)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    baseline_imgs.append(img)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>show_images(</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    baseline_imgs,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Prompt A — 2D diagram style"</span>, <span class="st">"Prompt B — Infographic style"</span>],</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    suptitle<span class="op">=</span><span class="st">"Baseline Text-to-Image (guidance_scale = 7.5)"</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="baseline" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/baseline-output-1.png" width="909" height="494" class="figure-img"></p>
+<figcaption>Baseline text-to-image outputs for Prompt A (left) and Prompt B (right).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Observations:</strong> Prompt A tends to produce a cleaner, more schematic layout because of the explicit “white background” and “illustration style” keywords. Prompt B’s “blue sky and ocean” cue introduces a more naturalistic color palette that makes the result feel less like a labeled scientific figure. In both outputs, text labels are garbled or absent. SD 1.5 learns image statistics at the patch level and is not trained to model character sequences, so legible text is beyond its capability. The broad spatial arrangement (clouds above, water below) is usually correct, but specific process arrows are stylized rather than instructionally clear.</p>
+<hr>
+</section>
+<section id="guidance-scale-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="guidance-scale-exploration">Guidance Scale Exploration</h2>
+<p>Prompt A is generated at three guidance scales with a fixed seed to isolate the effect of CFG on structure and prompt adherence.</p>
+<div id="cell-guidance-scale" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>CFG_VALUES <span class="op">=</span> [<span class="dv">4</span>, <span class="fl">7.5</span>, <span class="dv">12</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cfg_paths <span class="op">=</span> [<span class="ss">f"outputs/cfg_</span><span class="sc">{</span>v<span class="sc">}</span><span class="ss">.png"</span> <span class="cf">for</span> v <span class="kw">in</span> CFG_VALUES]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>need_cfg <span class="op">=</span> <span class="kw">not</span> <span class="bu">all</span>(os.path.exists(p) <span class="cf">for</span> p <span class="kw">in</span> cfg_paths)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> need_cfg <span class="kw">and</span> <span class="st">"pipe"</span> <span class="kw">not</span> <span class="kw">in</span> <span class="bu">dir</span>():</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    pipe <span class="op">=</span> StableDiffusionPipeline.from_pretrained(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        MODEL_ID, torch_dtype<span class="op">=</span>DTYPE, safety_checker<span class="op">=</span><span class="va">None</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    ).to(DEVICE)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    pipe.scheduler <span class="op">=</span> UniPCMultistepScheduler.from_config(pipe.scheduler.config)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    pipe.enable_attention_slicing()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>cfg_imgs <span class="op">=</span> []</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cfg <span class="kw">in</span> CFG_VALUES:</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> <span class="ss">f"outputs/cfg_</span><span class="sc">{</span>cfg<span class="sc">}</span><span class="ss">.png"</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> os.path.exists(path):</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> Image.<span class="bu">open</span>(path)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> pipe(</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>            PROMPT_A,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            negative_prompt<span class="op">=</span>NEG,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>            guidance_scale<span class="op">=</span>cfg,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>            num_inference_steps<span class="op">=</span>STEPS,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>            width<span class="op">=</span>IMG_SIZE,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>            height<span class="op">=</span>IMG_SIZE,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>            generator<span class="op">=</span>make_generator(),</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        ).images[<span class="dv">0</span>]</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        img.save(path)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    cfg_imgs.append(img)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>show_images(</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    cfg_imgs,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    [<span class="ss">f"CFG = </span><span class="sc">{</span>v<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> v <span class="kw">in</span> CFG_VALUES],</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    cols<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    suptitle<span class="op">=</span><span class="st">"Guidance Scale Comparison — Prompt A"</span>,</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="guidance-scale" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/guidance-scale-output-1.png" width="1388" height="494" class="figure-img"></p>
+<figcaption>Effect of guidance scale on Prompt A output.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li><strong>CFG = 4:</strong> The output is loosely structured and dreamlike. Colors are muted, and transitions are soft. Water cycle concepts are present but abstract. The result resembles a landscape painting more than a diagram. The model took too much creative liberty to be educationally useful.</li>
+<li><strong>CFG = 7.5:</strong> The default strikes a balance. Recognizable diagram elements appear (cloud shapes, a water body, ground), and the composition is more focused, though the model still takes creative license with arrow placement and labels.</li>
+<li><strong>CFG = 12:</strong> The model adheres very strictly to every word in the prompt, sometimes to a fault. Colors become oversaturated and elements can appear crowded or distorted as the model attempts to represent everything simultaneously. Structural coherence can actually decrease at very high CFG values because the guidance gradient is amplified to the point where the output is pushed into low-probability regions of the distribution, causing over-saturation and distortion.</li>
+</ul>
+<hr>
+</section>
+<section id="method-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="method-comparison">Method Comparison</h2>
+<section id="image-to-image" class="level3">
+<h3 class="anchored" data-anchor-id="image-to-image">Image-to-Image</h3>
+<p>The reference sketch (<code>reference_water_cycle.png</code>) provides a structural starting point. At <code>strength=0.6</code>, the reference is noised to 60% of maximum noise, and the model denoises from that point, covering 60% of the full denoising schedule. Higher strength gives the prompt more creative latitude; lower strength keeps the output closer to the reference.</p>
+<div id="cell-img2img" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"pipe"</span> <span class="kw">in</span> <span class="bu">dir</span>():</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> pipe</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> DEVICE <span class="op">==</span> <span class="st">"cuda"</span>:</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        torch.cuda.empty_cache()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>i2i_path <span class="op">=</span> <span class="st">"outputs/img2img.png"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> os.path.exists(i2i_path):</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    i2i_out <span class="op">=</span> Image.<span class="bu">open</span>(i2i_path)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    i2i_pipe <span class="op">=</span> StableDiffusionImg2ImgPipeline.from_pretrained(</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        MODEL_ID, torch_dtype<span class="op">=</span>DTYPE, safety_checker<span class="op">=</span><span class="va">None</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    ).to(DEVICE)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    i2i_pipe.scheduler <span class="op">=</span> UniPCMultistepScheduler.from_config(i2i_pipe.scheduler.config)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    i2i_pipe.enable_attention_slicing()</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    i2i_out <span class="op">=</span> i2i_pipe(</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        PROMPT_A,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        image<span class="op">=</span>ref_img,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        negative_prompt<span class="op">=</span>NEG,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        strength<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        guidance_scale<span class="op">=</span><span class="fl">7.5</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        num_inference_steps<span class="op">=</span>STEPS,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        generator<span class="op">=</span>make_generator(),</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    ).images[<span class="dv">0</span>]</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    i2i_out.save(i2i_path)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>show_images(</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    [ref_img, i2i_out],</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Reference sketch (input)"</span>, <span class="st">"Image-to-Image output (strength = 0.6)"</span>],</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    suptitle<span class="op">=</span><span class="st">"Image-to-Image — Prompt A"</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="img2img" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/img2img-output-1.png" width="909" height="494" class="figure-img"></p>
+<figcaption>Image-to-image: reference sketch (left) and generated output (right).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Analysis:</strong> The img2img output preserves the broad spatial composition of the reference—mountain on the left, ocean on the right, cloud above—because denoising begins from a partially noised version of that arrangement. However, SD 1.5 re-textures everything in its own style: the mountain becomes painterly, the cloud gains photorealistic volume, and the clean diagram arrows are replaced by the model’s stylistic interpretation of water flow. This method is most useful when a structural template already exists, and the goal is stylization rather than scientific fidelity.</p>
+<hr>
+</section>
+<section id="inpainting" class="level3">
+<h3 class="anchored" data-anchor-id="inpainting">Inpainting</h3>
+<p>A mask is applied to the upper-center region of the baseline image (where the cloud should appear), and the inpainting model regenerates only that region conditioned on a cloud-focused prompt while preserving everything else.</p>
+<div id="cell-inpainting" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"i2i_pipe"</span> <span class="kw">in</span> <span class="bu">dir</span>():</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> i2i_pipe</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> DEVICE <span class="op">==</span> <span class="st">"cuda"</span>:</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        torch.cuda.empty_cache()</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>base_img <span class="op">=</span> Image.<span class="bu">open</span>(<span class="st">"outputs/baseline_0.png"</span>).convert(<span class="st">"RGB"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Elliptical mask over the upper-center cloud region</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> Image.new(<span class="st">"L"</span>, (IMG_SIZE, IMG_SIZE), <span class="dv">0</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>draw <span class="op">=</span> ImageDraw.Draw(mask)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>draw.ellipse(</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    [IMG_SIZE <span class="op">//</span> <span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">3</span> <span class="op">*</span> IMG_SIZE <span class="op">//</span> <span class="dv">4</span>, IMG_SIZE <span class="op">//</span> <span class="dv">3</span>],</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    fill<span class="op">=</span><span class="dv">255</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>mask_vis <span class="op">=</span> mask.convert(<span class="st">"RGB"</span>)  <span class="co"># white-on-black for display</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>CLOUD_PROMPT <span class="op">=</span> (</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fluffy white cumulus clouds with condensing water droplets, "</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"educational science diagram style, white background, blue-grey cloud"</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>inp_path <span class="op">=</span> <span class="st">"outputs/inpainted.png"</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> os.path.exists(inp_path):</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    inp_out <span class="op">=</span> Image.<span class="bu">open</span>(inp_path)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    inpaint_pipe <span class="op">=</span> StableDiffusionInpaintPipeline.from_pretrained(</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        INPAINT_ID, torch_dtype<span class="op">=</span>DTYPE, safety_checker<span class="op">=</span><span class="va">None</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    ).to(DEVICE)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    inpaint_pipe.enable_attention_slicing()</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    inp_out <span class="op">=</span> inpaint_pipe(</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        CLOUD_PROMPT,</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        image<span class="op">=</span>base_img,</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        mask_image<span class="op">=</span>mask,</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>        negative_prompt<span class="op">=</span>NEG,</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        guidance_scale<span class="op">=</span><span class="fl">7.5</span>,</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        num_inference_steps<span class="op">=</span>STEPS,</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>        width<span class="op">=</span>IMG_SIZE,</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        height<span class="op">=</span>IMG_SIZE,</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        generator<span class="op">=</span>make_generator(),</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    ).images[<span class="dv">0</span>]</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    inp_out.save(inp_path)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>show_images(</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    [base_img, mask_vis, inp_out],</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Baseline (source)"</span>, <span class="st">"Mask (white = regenerate)"</span>, <span class="st">"Inpainted result"</span>],</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    cols<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    suptitle<span class="op">=</span><span class="st">"Inpainting — Cloud Region"</span>,</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="inpainting" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/inpainting-output-1.png" width="1388" height="494" class="figure-img"></p>
+<figcaption>Inpainting: source image (left), mask (center), inpainted result (right).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Analysis:</strong> The inpainting model fills the masked region while blending with the surrounding pixels. The regenerated cloud is conditioned on both the prompt <em>and</em> the surrounding context, but the model has no semantic understanding of the arrows leading to and from that region; it treats the cloud as a standalone visual element. Blending at the mask boundary is usually smooth. Still, the regenerated cloud may be larger, smaller, or positioned differently than what the surrounding diagram implies, highlighting why inpainting is better suited to aesthetic corrections than structural diagram repairs.</p>
+<hr>
+</section>
+<section id="controlnet-canny-edge" class="level3">
+<h3 class="anchored" data-anchor-id="controlnet-canny-edge">ControlNet (Canny Edge)</h3>
+<p>Canny edge detection is applied to the reference sketch to extract structural outlines. These edges serve as the control signal, injected into the diffusion process at every step to constrain the output geometry.</p>
+<div id="cell-controlnet" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"inpaint_pipe"</span> <span class="kw">in</span> <span class="bu">dir</span>():</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> inpaint_pipe</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> DEVICE <span class="op">==</span> <span class="st">"cuda"</span>:</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        torch.cuda.empty_cache()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract Canny edges from the reference sketch</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>ref_arr    <span class="op">=</span> np.array(ref_img)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>canny_arr  <span class="op">=</span> cv2.Canny(ref_arr, threshold1<span class="op">=</span><span class="dv">80</span>, threshold2<span class="op">=</span><span class="dv">200</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>canny_rgb  <span class="op">=</span> cv2.cvtColor(canny_arr, cv2.COLOR_GRAY2RGB)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>canny_pil  <span class="op">=</span> Image.fromarray(canny_rgb)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>cn_path <span class="op">=</span> <span class="st">"outputs/controlnet.png"</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> os.path.exists(cn_path):</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    cn_out <span class="op">=</span> Image.<span class="bu">open</span>(cn_path)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    controlnet <span class="op">=</span> ControlNetModel.from_pretrained(CNET_ID, torch_dtype<span class="op">=</span>DTYPE)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    cn_pipe <span class="op">=</span> StableDiffusionControlNetPipeline.from_pretrained(</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        MODEL_ID,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        controlnet<span class="op">=</span>controlnet,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        torch_dtype<span class="op">=</span>DTYPE,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        safety_checker<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    ).to(DEVICE)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    cn_pipe.scheduler <span class="op">=</span> UniPCMultistepScheduler.from_config(cn_pipe.scheduler.config)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    cn_pipe.enable_attention_slicing()</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    cn_out <span class="op">=</span> cn_pipe(</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>        PROMPT_A,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        image<span class="op">=</span>canny_pil,</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        negative_prompt<span class="op">=</span>NEG,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>        guidance_scale<span class="op">=</span><span class="fl">7.5</span>,</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        controlnet_conditioning_scale<span class="op">=</span><span class="fl">0.8</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        num_inference_steps<span class="op">=</span>STEPS,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        width<span class="op">=</span>IMG_SIZE,</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>        height<span class="op">=</span>IMG_SIZE,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        generator<span class="op">=</span>make_generator(),</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    ).images[<span class="dv">0</span>]</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    cn_out.save(cn_path)</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>show_images(</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    [ref_img, canny_pil, cn_out],</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Reference sketch"</span>, <span class="st">"Canny edges (control input)"</span>, <span class="st">"ControlNet output"</span>],</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    cols<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    suptitle<span class="op">=</span><span class="st">"ControlNet (Canny) — Prompt A"</span>,</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="controlnet" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/controlnet-output-1.png" width="1388" height="494" class="figure-img"></p>
+<figcaption>ControlNet: reference sketch (left), Canny edges (center), ControlNet output (right).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Analysis:</strong> ControlNet produces the most structurally faithful output of the three methods. The Canny edge map forces the model to respect the exact positions and shapes from the reference—the mountain silhouette, cloud cluster, ocean boundary, and arrow paths are all preserved. SD 1.5 then renders these structural outlines with realistic textures driven by the prompt. The key tradeoff is that the output <em>inherits any inaccuracies in the reference sketch</em>. If the reference has an arrow going the wrong direction, ControlNet reproduces that error with high fidelity.</p>
+<hr>
+</section>
+</section>
+<section id="comparison-and-interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-and-interpretation">Comparison and Interpretation</h2>
+<div id="cell-comparison-grid" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"cn_pipe"</span> <span class="kw">in</span> <span class="bu">dir</span>():</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> cn_pipe</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"controlnet"</span> <span class="kw">in</span> <span class="bu">dir</span>():</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> controlnet</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> DEVICE <span class="op">==</span> <span class="st">"cuda"</span>:</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    torch.cuda.empty_cache()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>image_files <span class="op">=</span> [</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"outputs/baseline_0.png"</span>, <span class="st">"Baseline</span><span class="ch">\n</span><span class="st">Prompt A"</span>),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"outputs/baseline_1.png"</span>, <span class="st">"Baseline</span><span class="ch">\n</span><span class="st">Prompt B"</span>),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"outputs/cfg_4.png"</span>,      <span class="st">"CFG = 4"</span>),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"outputs/cfg_7.5.png"</span>,    <span class="st">"CFG = 7.5"</span>),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"outputs/cfg_12.png"</span>,     <span class="st">"CFG = 12"</span>),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"outputs/img2img.png"</span>,    <span class="st">"Image-to-Image</span><span class="ch">\n</span><span class="st">(strength=0.6)"</span>),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"outputs/inpainted.png"</span>,  <span class="st">"Inpainting</span><span class="ch">\n</span><span class="st">(cloud region)"</span>),</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"outputs/controlnet.png"</span>, <span class="st">"ControlNet</span><span class="ch">\n</span><span class="st">(Canny)"</span>),</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>all_images <span class="op">=</span> [Image.<span class="bu">open</span>(p) <span class="cf">for</span> p, _ <span class="kw">in</span> image_files]</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>all_titles <span class="op">=</span> [t <span class="cf">for</span> _, t <span class="kw">in</span> image_files]</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>show_images(all_images, all_titles, cols<span class="op">=</span><span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">10</span>), suptitle<span class="op">=</span><span class="st">"Full Method Comparison"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="comparison-grid" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/comparison-grid-output-1.png" width="1867" height="984" class="figure-img"></p>
+<figcaption>All generated images across methods and guidance values.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Cross-method observations:</strong></p>
+<ul>
+<li><strong>Most diagram-like:</strong> ControlNet and the CFG = 12 baseline produce the most recognizable diagram compositions. ControlNet wins on spatial accuracy; high CFG wins on keyword density in the prompt, but can look over-compressed.</li>
+<li><strong>Structural preservation:</strong> Only ControlNet reliably preserves the spatial relationships from the reference diagram. Image-to-image preserves broad layout but loses fine structure (particularly arrows). Inpainting affects only the masked region and has no awareness of the rest of the diagram.</li>
+<li><strong>Misleading elements:</strong> CFG = 4 is the most misleading. The “water cycle” visual may show water flowing in any direction or omit key stages entirely. Several outputs contain decorative arrows that carry no directional information about the cycle.</li>
+<li><strong>Visual polish vs.&nbsp;scientific accuracy:</strong> SD 1.5 consistently trades scientific precision for aesthetic appeal. The most visually polished outputs (medium CFG, ControlNet) are coincidentally also the most diagram-like, but none reliably produce instructionally accurate labeled arrows or legible text.</li>
+</ul>
+<hr>
+</section>
+<section id="scientific-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="scientific-evaluation">Scientific Evaluation</h2>
+<p>Each image is evaluated on four criteria: <strong>✓ Good</strong>, <strong>~ Partial</strong>, or <strong>✗ Poor/Missing</strong>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Image</th>
+<th>Component Completeness</th>
+<th>Structural Accuracy</th>
+<th>Relationship Correctness</th>
+<th>Misleading Elements</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Baseline — Prompt A</td>
+<td>~ Partial (2–3 stages visible)</td>
+<td>~ Partial (clouds above, water below; arrows unclear)</td>
+<td>✗ Arrows are decorative only</td>
+<td>~ Minor (decorative water textures imply wrong flow)</td>
+</tr>
+<tr class="even">
+<td>Baseline — Prompt B</td>
+<td>~ Partial (atmospheric stages present, runoff absent)</td>
+<td>✓ Sky/ocean hierarchy correct</td>
+<td>✗ No directional cues</td>
+<td>~ Minor (naturalistic style obscures the cycle)</td>
+</tr>
+<tr class="odd">
+<td>CFG = 4</td>
+<td>✗ Missing (abstracted beyond recognition)</td>
+<td>✗ Landscape feel, no cycle structure</td>
+<td>✗ No arrows</td>
+<td>✗ Major (random shapes misrepresent water flow)</td>
+</tr>
+<tr class="even">
+<td>CFG = 7.5</td>
+<td>~ Partial (2–3 stages, no labels)</td>
+<td>~ Partial (basic layout correct)</td>
+<td>✗ Arrows present but not directional</td>
+<td>~ Minor (non-directional arrows could mislead)</td>
+</tr>
+<tr class="odd">
+<td>CFG = 12</td>
+<td>✓ All stages hinted</td>
+<td>~ Partial (crowded, proportions distorted)</td>
+<td>~ Partial (some directional arrows)</td>
+<td>~ Minor (over-saturation distorts relative scale)</td>
+</tr>
+<tr class="even">
+<td>Image-to-Image</td>
+<td>~ Partial (layout preserved, some stages lost to stylization)</td>
+<td>✓ Reference layout preserved</td>
+<td>~ Partial (arrows implied by composition)</td>
+<td>~ Minor (stylization removes scientific precision)</td>
+</tr>
+<tr class="odd">
+<td>Inpainting</td>
+<td>~ Partial (cloud region improved; rest unchanged from baseline)</td>
+<td>~ Partial (regenerated cloud may shift position)</td>
+<td>✗ Inpainted region disconnected from surrounding arrows</td>
+<td>~ Minor (cloud placement may not match arrow endpoints)</td>
+</tr>
+<tr class="even">
+<td>ControlNet</td>
+<td>✓ All stages from reference retained</td>
+<td>✓ Matches reference exactly</td>
+<td>✓ Reference arrows reproduced</td>
+<td>✓ None (mirrors reference fidelity)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="classroom-recommendation" class="level2">
+<h2 class="anchored" data-anchor-id="classroom-recommendation">Classroom Recommendation</h2>
+<p>Based on this exploration, <strong>ControlNet with a hand-drawn reference diagram</strong> is the most appropriate method for generating classroom scientific diagrams. At a guidance scale of 7.5 and a ControlNet conditioning scale of 0.8, it consistently preserves the spatial layout, directional arrows, and component arrangement of the source sketch—the elements most critical for scientific correctness.</p>
+<p><strong>Recommended workflow for classroom use:</strong></p>
+<ol type="1">
+<li>Draw or source a simple line-art version of the target diagram (rough sketches work—Canny edge detection is tolerant of imperfect lines).</li>
+<li>Run ControlNet with a descriptive educational prompt at guidance scale 7–8.</li>
+<li>Generate several seeds and select the most scientifically accurate output.</li>
+<li>Manually verify arrow directions, label placement, and component completeness before classroom use.</li>
+</ol>
+<p><strong>Methods to avoid in classroom diagrams:</strong></p>
+<ul>
+<li><strong>Low CFG (≤ 5):</strong> Too random; outputs look interesting but are scientifically unreliable.</li>
+<li><strong>Inpainting alone:</strong> Corrects isolated regions without understanding their structural role in the larger diagram. Relationships between components, particularly arrow continuity, are not preserved across the mask boundary.</li>
+<li><strong>Text-to-image without structural control:</strong> Prompt-only generation is inconsistent and rarely yields instructionally accurate labeled diagrams.</li>
+</ul>
+<p>A key takeaway for educators is that <em>all</em> diffusion model outputs require expert review before classroom use. Even the best ControlNet output cannot be trusted to render legible text labels or guarantee correct arrow directionality without human verification. These tools are most useful as starting points for customization, not as standalone diagram generators.</p>
+</section>
+<section id="declaration-of-generative-ai-utilization" class="level2">
+<h2 class="anchored" data-anchor-id="declaration-of-generative-ai-utilization">Declaration of Generative AI Utilization</h2>
+<p>During the preparation of this work, the author utilized Anthropic’s Claude Opus 4.6. The author reviewed and edited the content of this assignment as needed and takes full responsibility for it.</p>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/penngse\.johnbaker\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Made with <a href="https://quarto.org/" target="_blank"><img src="https://quarto.org/quarto.png" class="img-fluid" width="65" alt="Quarto"></a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/baker-jr-john/Website" target="_blank">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
