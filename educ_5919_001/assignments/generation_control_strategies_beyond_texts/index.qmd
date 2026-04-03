@@ -15,7 +15,7 @@ keywords:
   - scientific diagrams
   - image generation control
   - stable diffusion
-# image: images/Gemini_Generated_Image_1vc6am1vc6am1vc6.png
+image: images/Gemini_Generated_Image_6mn7nt6mn7nt6mn7.png
 format: html
 draft: false
 jupyter: python3
