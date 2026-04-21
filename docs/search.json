@@ -179,7 +179,7 @@
     "href": "educ_5919_001/assignments/generation_control_strategies_beyond_texts/index.html",
     "title": "Generation Control Strategies for Scientific Diagrams",
     "section": "",
-    "text": "Note on compute: Image generation with SD 1.5 requires a GPU (CUDA or Apple Silicon MPS) for practical runtimes (~1–2 min per image). On CPU, each generation takes 20–40 minutes. If running locally without a GPU, generate the images first in Google Colab (free T4 GPU), download the outputs/ folder, place it alongside this file, then render — the caching checks (if os.path.exists(path)) will skip regeneration and use the saved files."
+    "text": "Note on compute: Image generation with SD 1.5 requires a GPU (CUDA or Apple Silicon MPS) for practical runtimes (~1–2 min per image). On CPU, each generation takes 20–40 minutes. If running locally without a GPU, generate the images first in Google Colab (free T4 GPU), download the outputs/ folder, place it alongside this file, then render. The caching checks (if os.path.exists(path)) will skip regeneration and use the saved files."
   },
   {
     "objectID": "educ_5919_001/assignments/generation_control_strategies_beyond_texts/index.html#background-and-setup",
